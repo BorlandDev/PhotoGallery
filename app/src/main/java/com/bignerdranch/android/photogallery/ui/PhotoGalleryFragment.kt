@@ -12,6 +12,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.work.*
 import com.bignerdranch.android.photogallery.POLL_WORK
@@ -30,9 +31,27 @@ class PhotoGalleryFragment : Fragment(R.layout.fragment_photo_gallery) {
         }
 
     private val viewModel: PhotoGalleryViewModel by viewModels()
-    private val adapter = PhotoListAdapter()
     private var searchView: SearchView? = null
     private var pollingMenuItem: MenuItem? = null
+    private val adapter = PhotoListAdapter { photoPageUri ->
+        findNavController().navigate(
+            PhotoGalleryFragmentDirections.showPhoto(
+                photoPageUri
+            )
+        )
+
+        /* Custom Tab /
+
+        CustomTabsIntent.Builder()
+            .setToolbarColor(
+                ContextCompat.getColor(
+                    requireContext(), R.color.black
+                )
+            )
+            .setShowTitle(true)
+            .build()
+            .launchUrl(requireContext(), photoPageUri) */
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
